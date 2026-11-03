@@ -1,18 +1,23 @@
+
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8"/>
-    </head>
-    <body>
-        <div>
-            <form method="POST" action="/form">
-                <label>Name:</label>
-                <input type="text" id="name" name="name" value="" required/><br><br>
-                <label>Address:</label>
-                <input type="text" id="address" name="address" value="" required/><br><br>
-                <input type="submit" value="Submit"/>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Go Form</title>
+</head>
+<body>
+    <div>
+        <form method="POST" action="/form">
+            <label>Name:</label>
+            <input type="text" id="name" name="name" required/>
+            <br><br>
 
-            </form>
-        </div>
-    </body>
+            <label>Address:</label>
+            <input type="text" id="address" name="address" required/>
+            <br><br>
+
+            <input type="submit" value="Submit"/>
+        </form>
+    </div>
+</body>
 </html>
