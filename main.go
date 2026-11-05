@@ -1,43 +1,53 @@
+
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 )
 
 func formHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
+	if r.Method != http.MethodPost {
 		http.Error(w, "Method is not supported.", http.StatusMethodNotAllowed)
 		return
 	}
 
 	if err := r.ParseForm(); err != nil {
-		fmt.Fprintf(w, "ParseForm() err: %v", err)
+		http.Error(w, "Invalid form data.", http.StatusBadRequest)
 		return
 	}
-
-	fmt.Fprintf(w, "POST request successful\n")
 
 	name := r.FormValue("name")
 	address := r.FormValue("address")
 
+	if name == "" || address == "" {
+		http.Error(w, "Name and address are required.", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Fprintf(w, "POST request successful\n")
 	fmt.Fprintf(w, "Name = %s\n", name)
 	fmt.Fprintf(w, "Address = %s\n", address)
 }
 
 func helloHandler(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/hello" {
-		http.Error(w, "404 not found.", http.StatusNotFound)
-		return
-	}
-
-	if r.Method != "GET" {
+	if r.Method != http.MethodGet {
 		http.Error(w, "Method is not supported.", http.StatusMethodNotAllowed)
 		return
 	}
 
 	fmt.Fprintf(w, "Hello!")
+}
+
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(map[string]string{
+		"status":  "healthy",
+		"message": "Go server is running",
+	})
 }
 
 func main() {
@@ -46,8 +56,9 @@ func main() {
 	http.Handle("/", fileServer)
 	http.HandleFunc("/form", formHandler)
 	http.HandleFunc("/hello", helloHandler)
+	http.HandleFunc("/health", healthHandler)
 
-	fmt.Printf("Starting server at port 8080\n")
+	fmt.Println("Starting server at port 8080")
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
