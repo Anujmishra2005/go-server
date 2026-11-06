@@ -37,8 +37,7 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method is not supported.", http.StatusMethodNotAllowed)
 		return
 	}
-
-	fmt.Fprintf(w, "Hello!")
+	fmt.Fprintf(w, "Hello")
 }
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
@@ -46,7 +45,7 @@ func healthHandler(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(map[string]string{
 		"status":  "healthy",
-		"message": "Go server is running",
+		"message": "Go server is running now",
 	})
 }
 
